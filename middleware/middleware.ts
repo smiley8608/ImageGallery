@@ -14,29 +14,30 @@ const middleware = (req: UpdatedRequest, res: express.Response, next: express.Ne
         try {
             const varify = Jwt.verify(Token, envSecurt)
             const decodedToken:any = Jwt.decode(Token)
-            if (req.path === '/signin' || req.path === '/login') {
+            if (req.path === '/signup' || req.path === '/login') {
                 return res.json({ message: 'Invalid entry' })
             } else {
-                if (req.path !== '/sign' && req.path !== '/login') {
+                if (req.path !== '/signup' && req.path !== '/login') {
                     userModel.findById(decodedToken.id)
                     .then(responce=>{
                         req.User=responce as unknown as UserProps
                         next()
                     })
                     .catch(err=>{
-                        return res.json({message:err}) 
+                        return res.json({message:err,User:null,Auth:false}) 
                     })
                 }
             }
         } catch (error) {
-            if (req.path === '/signin' || req.path === '/login') {
+            if (req.path === '/signup' || req.path === '/login') {
                 next()
             } else {
-                return res.json({ message: 'your account is not valid' })
+                return res.json({ message: 'your account is not valid',User:null,Auth:false })
             }
         }
     } else {
-        if (req.path === '/signin' || req.path === '/login') {
+        if (req.path === '/signup' || req.path === '/login') {
+            console.log('signup');
             next()
         } else {
             return res.json({ User: null, Auth: false })

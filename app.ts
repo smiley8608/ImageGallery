@@ -2,11 +2,19 @@ import bodyParser = require('body-parser')
 import express =require('express')
 import mongoose from 'mongoose'
 import Router from './router/userrouter'
+import Cors =require ('cors') 
+import ImageRouter from './router/imagerouter'
 const app=express()
 
+app.use(Cors({
+    origin:'*',
+    methods:['POST','GET','PUT','DELETE'],
+    credentials:true
+}))
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use('/',Router)
+app.use('/image',ImageRouter)
 
 mongoose.connect('mongodb://localhost:27017/gallary',(err)=>{
     if(err){

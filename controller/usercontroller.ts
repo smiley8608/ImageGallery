@@ -19,17 +19,19 @@ const signInSchema = Joi.object({
 
 export const SignIn = (req: UpdatedRequest, res: express.Response) => {
 
-    const { username, firstname, lastname, email, password, conformpassword } = req.body
+    const { username, firstname, lastname, email, password, conformpassword } = req.body.data
 
-    if (password === conformpassword) {
+    if (password===conformpassword) {
+        
         signInSchema.validateAsync({ username, firstname, lastname, password, email })
-            .then(validateResult => {
-                userModel.find({ email: email })
-                    .then(emailArr => {
-                        if (emailArr.length >= 1) {
-                            return res.json({ message: 'Email id already exists' })
-                        } else {
-                            bcrypt.hash(password,8)
+        .then(validateResult => {
+            userModel.find({email:email})
+            .then(emailArr => {
+                if (emailArr.length >= 1) {
+                    return res.json({ message: 'Email id already exists' })
+                } else {
+                    console.log('run');
+                    bcrypt.hash(password,8)
                             .then(hassedpassword=>{
                                 userModel.create({firstname,lastname,username,email,password:hassedpassword})
                                 .then(userResult=>{
@@ -39,7 +41,7 @@ export const SignIn = (req: UpdatedRequest, res: express.Response) => {
                                         let token
                                         if(process.env.Token_Securt){
                                            token= Jwt.sign({_id:userResult.id},process.env.Token_Securt)
-                                           return res.json({message:'Account Created successfully !',result:userResult,tkn:token,Auth:true})
+                                           return res.json({message:'Account Created successfully !',User:userResult,tkn:token,Auth:true})
                                         }
                                     }
                                 }).catch(err=>{
@@ -66,7 +68,7 @@ export const SignIn = (req: UpdatedRequest, res: express.Response) => {
 })
 
 export const LoginValidation=(req:UpdatedRequest,res:express.Response)=>{
-    const {email,password}=req.body
+    const {email,password}=req.body.data
     loginSchema.validateAsync({email,password})
     .then(validateLogin=>{
         userModel.findOne({email:email})
@@ -78,8 +80,8 @@ export const LoginValidation=(req:UpdatedRequest,res:express.Response)=>{
                 .then(comparedpass=>{
                     if(comparedpass){
                         if(process.env.Token_Securt){
-                            let token=Jwt.sign({_id:usermail.id},process.env.Token_Securt)
-                            return res.json({message:'Logined Successfully !',result:usermail,tkn:token ,Auth:true})
+                            let token=Jwt.sign({id:usermail._id},process.env.Token_Securt)
+                            return res.json({message:'Logined Successfully !',User:usermail,tkn:token ,Auth:true})
                         }
                     }else{
                         return res.json({message:'please check the password !'})
@@ -96,4 +98,7 @@ export const LoginValidation=(req:UpdatedRequest,res:express.Response)=>{
     .catch(err=>{
         return res.json({message:err})
     })
+}
+export const AuthStatus=(req:UpdatedRequest,res:express.Response)=>{
+    return res.json({Auth:true,User:req.User})
 }

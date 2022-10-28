@@ -14,5 +14,12 @@ export interface UpdatedRequest extends express.Request{
 }
 
 export interface RouterProps extends express.IRouter  {
-    post(path:string,...middleware)
+    post: (path:string,...middleware) => any
+    get: (path:string,...middleware) => any
 }
+
+export interface UpdatedImagetype extends express.Request{
+    email:UpdatedRequest,
+    path:Express.Multer.File[]
+}
+
