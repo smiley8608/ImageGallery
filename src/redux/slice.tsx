@@ -3,7 +3,7 @@ import  { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState:UpdatedInitialProps ={
     User:null,
-    Auth:true
+    Auth:false
 }
 
 const UserSlice= createSlice({

@@ -4,14 +4,17 @@ import { useAppSelector } from "../redux/hook";
 
 const Navbar = () => {
   const auth = useAppSelector((state) => state.User.Auth);
+  console.log(`Auth ${auth}`);
+  
+  
 
   return (
     <div className="tw-w-full tw-bg-blue-500 tw-flex tw-p-4 tw-justify-end tw-space-x-3 tw-absolute">
-      {auth ? (
+      {!auth ? (
         <>
           <div className="tw-space-x-3">
             <Link to="/">Home</Link>
-            <Link to="/signin">SignIn</Link>
+            <Link to="/signup">SignUp</Link>
             <Link to="/login">LogIn</Link>
           </div>
         </>
