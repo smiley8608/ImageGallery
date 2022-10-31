@@ -24,6 +24,7 @@ const Navbar = () => {
             <Link to="/">Home</Link>
             <Link to="/allimages">AllImages</Link>
             <Link to="/myimages">MyImages</Link>
+            <Link to ='/signout'>SignOut</Link>
           </div>
         </>
       )}

@@ -9,6 +9,8 @@ import { MyImages } from './pages/myimages';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from './redux/hook';
 import { setInitialState } from './redux/slice';
+import { SignOut } from './pages/signOut';
+import { ImageViewer } from './pages/imageviewer';
 
 function App() {
   const dispatch=useAppDispatch()
@@ -25,7 +27,7 @@ function App() {
   })
   },[dispatch,auth])
   return (
-    <div className="">
+    <div>
       <BrowserRouter>
       <Navbar />
       <Routes>
@@ -34,6 +36,8 @@ function App() {
         <Route path='/signup' element={<SignUp />} />
         <Route path='/allimages' element={<AllImages />} />
         <Route path='/myimages' element={<MyImages />} />
+        <Route path='/signout' element={<SignOut />}/>
+        <Route path='/imageviewer/:id' element={<ImageViewer />} />
       </Routes>
       
       </BrowserRouter>

@@ -16,11 +16,10 @@ export const SignUp=()=>{
    })
    const submitHandler=(e:FormEvent)=>{
     e.preventDefault()
-    axios.post('/signin',{data:data})
+    axios.post('/signup',{data:data})
     .then(responce=>{
         console.log(responce.data.Auth);
-        dispatch(setInitialState(responce.data.User))
-        dispatch(setInitialState(responce.data.Auth))
+       dispatch(setInitialState({User:responce.data.User,Auth:responce.data.Auth}))
         localStorage.setItem('jwt-token',responce.data.tkn)
         alert(responce.data.message)
 
