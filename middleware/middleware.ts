@@ -14,11 +14,13 @@ const middleware = (req: UpdatedRequest, res: express.Response, next: express.Ne
         try {
             const varify = Jwt.verify(Token, envSecurt)
             const decodedToken:any = Jwt.decode(Token)
+            console.log(decodedToken);
+            
             if (req.path === '/signup' || req.path === '/login') {
                 return res.json({ message: 'Invalid entry' })
             } else {
                 if (req.path !== '/signup' && req.path !== '/login') {
-                    userModel.findById(decodedToken.id)
+                    userModel.findById(decodedToken._id)
                     .then(responce=>{
                         req.User=responce as unknown as UserProps
                         next()

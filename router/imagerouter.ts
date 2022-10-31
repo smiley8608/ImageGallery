@@ -17,5 +17,8 @@ const storage = multer.diskStorage({
 
 const uplode = multer({ storage: storage, limits: { fileSize: 1025 * 1025 * 25 } })
 ImageRouter.post('/uploade', middleware,uplode.array('dbimages'), Imageuplode.ImageController)
+ImageRouter.get('/allimages',middleware,Imageuplode.AllImageController)
+ImageRouter.get('/myimages',middleware,Imageuplode.MyImageCOntroller)
+ImageRouter.get('/viewer/:id',middleware,Imageuplode.ImageViewer)
 
 export default ImageRouter
