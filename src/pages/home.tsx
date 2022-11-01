@@ -13,7 +13,6 @@ export const Home=()=>{
                         !auth?<>
                         <Link to={'/signup'} className='tw-bg-blue-600 tw-p-3 tw-rounded-lg'>SignUp</Link>
                         <Link to={'/login'} className='tw-bg-blue-600 tw-p-3 tw-rounded-lg'>LogIn</Link>
-                        
                         </>:<>
                         
                         <Link to={'/allimages'} className='tw-bg-blue-600 tw-p-3 tw-rounded-lg'>AllImages</Link>

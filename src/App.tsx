@@ -11,6 +11,8 @@ import { useAppDispatch, useAppSelector } from './redux/hook';
 import { setInitialState } from './redux/slice';
 import { SignOut } from './pages/signOut';
 import { ImageViewer } from './pages/imageviewer';
+import { ForgetPassword } from './pages/forgetpassword';
+import { ResetPassword } from './pages/resetpassword';
 
 function App() {
   const dispatch=useAppDispatch()
@@ -34,10 +36,15 @@ function App() {
         <Route path='/'  element={<Home />} />
         <Route path='/login' element={<LogIn />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/forgetpassword' element={<ForgetPassword />} />
+        <Route path='/resetpassword/:token' element={<ResetPassword />} />
         <Route path='/allimages' element={<AllImages />} />
         <Route path='/myimages' element={<MyImages />} />
         <Route path='/signout' element={<SignOut />}/>
-        <Route path='/imageviewer/:id' element={<ImageViewer />} />
+        {
+          auth?
+          <Route path='/imageviewer/:id' element={<ImageViewer />} />:<></>
+        }
       </Routes>
       
       </BrowserRouter>
