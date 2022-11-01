@@ -22,4 +22,8 @@ export interface UpdatedImagetype extends express.Request{
     email:UpdatedRequest,
     path:Express.Multer.File[]
 }
+export interface MailerProps {
+    email:string|undefined,
+    link:string
+}
 

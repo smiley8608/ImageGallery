@@ -38,7 +38,7 @@ const middleware = (req: UpdatedRequest, res: express.Response, next: express.Ne
             }
         }
     } else {
-        if (req.path === '/signup' || req.path === '/login') {
+        if (req.path === '/signup' || req.path === '/login'||req.path==='/forgetpassword ' || req.path==='/resetpassword/:token') {
             console.log('signup');
             next()
         } else {
