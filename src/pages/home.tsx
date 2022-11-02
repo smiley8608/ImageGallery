@@ -1,4 +1,6 @@
+import { url } from 'inspector'
 import { Link } from 'react-router-dom'
+import img from '../assets/mountains-best-for-desktop-background-wallpaper-preview.jpg'
 
 import { useAppSelector } from '../redux/hook'
 export const Home=()=>{

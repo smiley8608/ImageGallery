@@ -1,20 +1,33 @@
 import axios from "axios";
-import { FormEvent, useState } from "react";
-import { useParams } from "react-router";
+import { FormEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { setInitialState } from "../redux/slice";
 
 export const ResetPassword = () => {
   const [data, setData] = useState({ newpassword: "", conformpassword: "" });
-  const token = useParams();
- 
-
+  const {token} = useParams();
+  const dispatch=useAppDispatch()
+  
+  const navigate=useNavigate()
+  const auth=useAppSelector(state=>state.User.Auth)
+  
+  useEffect(()=>{
+    
+    if(auth){
+      navigate('/')
+    }
+  },[auth,navigate])
+  
   const submithandler = (e: FormEvent) => {
     e.preventDefault();
     axios.post(`/resetpassword/${token}`, { data: data }).then((responce) => {
       console.log(responce.data.message);
-
+      dispatch(setInitialState({User:responce.data.User,Auth:responce.data.Auth}))
       alert(responce.data.message);
     });
   };
+  console.log(auth);
   return (
     <div className="tw-bg-slate-300 tw-h-screen tw-flex tw-justify-center tw-items-center ">
       <form

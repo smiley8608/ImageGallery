@@ -36,14 +36,32 @@ export const AllImages = () => {
         },
       })
       .then((responce) => {
-        console.log(responce.data);
+       
         alert(responce.data.message);
       });
   };
+
+
   const imagehandler = (e: any) => {
     setImg(e.target.files);
   };
+  const addhandler=(_id:string)=>{
+    console.log(_id);
+    axios.post('/image/addimage',{_id:_id})
+    .then(responce=>{
+      console.log(responce.data.message)
+      alert(responce.data.message)
+      
+    })
+  }
+  const removehandler=(_id:string)=>{
+    
+    axios.post('/image/removeimage',{_id:_id})
+    .then(responce=>{
+      alert(responce.data.message)
+    })
 
+  }
   return (
     <div className=" tw-bg-gray-100  tw-h-screen tw-overflow-scroll">
       <div className="tw-w-full  tw-flex tw-justify-center  tw-mt-16 ">
@@ -64,13 +82,15 @@ export const AllImages = () => {
             console.log(value);
 
             return (
-                  <Link to={'/imageviewer/'+value._id}>
+                  
               <div className="tw-w-full  tw-grid tw-items-center tw-justify-center" key={value._id}>
                 <div className="tw-bg-white tw-text-gray-700 tw-w-72 tw-shadow-lg tw-rounded-md tw-overflow-hidden  ">
+                <Link to={'/imageviewer/'+value._id}>
                   <img
                     src={`http://localhost:3002/${value.path}`}
                     alt="products"
                     />
+                     </Link>
                   <div className="tw-p-5 tw-flex-col tw-gap-3">
                     <div className="tw-flex tw-gap-2">
                       <span className="tw-p">created By:</span>
@@ -78,10 +98,14 @@ export const AllImages = () => {
                         {value.username}
                       </h2>
                     </div>
+                    <div className="tw-flex tw-justify-between tw-mt-2">
+                      <button className="tw-p-3 tw-bg-blue-600 tw-rounded-xl" onClick={()=>addhandler(value._id)}>Add</button>
+                      <button className="tw-p-3 tw-bg-red-500 tw-rounded-xl" onClick={()=>removehandler(value._id)}>Remove</button>
+                    </div>
                   </div>
                 </div>
               </div>
-                    </Link>
+                   
             );
           })}
       </div>
