@@ -20,5 +20,7 @@ ImageRouter.post('/uploade', middleware,uplode.array('dbimages'), Imageuplode.Im
 ImageRouter.get('/allimages',middleware,Imageuplode.AllImageController)
 ImageRouter.get('/myimages',middleware,Imageuplode.MyImageCOntroller)
 ImageRouter.get('/viewer/:id',middleware,Imageuplode.ImageViewer)
+ImageRouter.post('/addimage',middleware,Imageuplode.AddImage)
+ImageRouter.post('/removeimage',middleware,Imageuplode.RemoveImage)
 
 export default ImageRouter

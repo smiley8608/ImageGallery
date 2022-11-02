@@ -9,6 +9,8 @@ dotenv.config()
 const middleware = (req: UpdatedRequest, res: express.Response, next: express.NextFunction) => {
     const envSecurt = process.env.Token_Securt
     const Token = req.headers['jwt-token'] as string
+    console.log('running');
+    
 
     if (Token && envSecurt) {
         try {
@@ -22,6 +24,8 @@ const middleware = (req: UpdatedRequest, res: express.Response, next: express.Ne
                 if (req.path !== '/signup' && req.path !== '/login') {
                     userModel.findById(decodedToken._id)
                     .then(responce=>{
+                        console.log('runner');
+                        
                         req.User=responce as unknown as UserProps
                         next()
                     })
@@ -38,11 +42,11 @@ const middleware = (req: UpdatedRequest, res: express.Response, next: express.Ne
             }
         }
     } else {
-        if (req.path === '/signup' || req.path === '/login'||req.path==='/forgetpassword ' || req.path==='/resetpassword/:token') {
-            console.log('signup');
+        if (req.path === '/signup' || req.path === '/login' || req.path === '/forgetpassword' || req.path === '/resetpassword/:token' ) {
+            console.log('signup')
             next()
         } else {
-            return res.json({ User: null, Auth: false })
+            return res.json({ User: null, Auth: false,message:'err' })
         }
     }
 

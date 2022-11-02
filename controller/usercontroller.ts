@@ -126,22 +126,16 @@ export const Forgetpassword = (req: UpdatedRequest, res: express.Response) => {
                                     TokenModel.create({
                                         email: responce.email,
                                         token: crypto.randomBytes(40).toString('hex'),
-                                        expridate:setTimeout(()=>{
-                                            Date.now()
-                                        },1000)
+                                        expridate:Date.now()
                                     }).then(tokenuser=>{
                                         const Link =tokenuser.token
-                                        console.log(Link);
+                                        console.log(Link)
+                                        // Mailer({email:responce.email,link:Link as string})
                                         return res.json({ message: 'Reset password link had sent to you', token: Link })
 
                                     }
 
                                     )
-
-
-                                    // Mailer({email:tokenemail.email,link:Link})
-
-
 
                                 }
                             })
@@ -163,8 +157,7 @@ export const Forgetpassword = (req: UpdatedRequest, res: express.Response) => {
 //     console.log(email);
 //     console.log(link);
 //     const transporter =nodemailer.createTransport({
-//         host:'smtp-relay.sendinblue.com',
-//         port:587,
+//         service:"sendinblue",
 //         auth: {
 //             user:'tsakthibala@gmail.com',
 //             pass:'UIyMvDH6zZxjS49G'
@@ -180,49 +173,57 @@ export const Forgetpassword = (req: UpdatedRequest, res: express.Response) => {
 // }
 const passwordschema=Joi.object({
     newpassword:Joi.string().max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,30}$')).required(),
-    conformpassword:Joi.string().max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,30}$')).required()
+    // conformpassword:Joi.string().max(30).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,30}$')).required()
 })
-export const resetpassword=(req:UpdatedRequest,res:express.Response)=>{
+export const Resetpassword=(req:UpdatedRequest,res:express.Response)=>{
     const {newpassword,conformpassword}=req.body.data
-    const token=req.params['token']
+    const token =req.params['token']
+    console.log(token);
+    
     if(newpassword===conformpassword){
         console.log('running');
-        
-        TokenModel.findOne({token:token})
-        .then(tokenuserobject=>{
-            console.log(tokenuserobject);
-            
-            if(!tokenuserobject){
-                return res.json({message:'something went wrong'})
-            }else{
-                userModel.findOne({email:tokenuserobject.email})
+        passwordschema.validateAsync({newpassword})
+        .then(validatepassword=>{
+            TokenModel.findOne({token:token})
+            .then(tokenuserobject=>{
+                console.log(tokenuserobject);
                 
-                .then(userobject=>{
-                    console.log(userobject);
-                    if(!userobject){
-                        return res.json({message:'something wents wrong'})
-                    }else{
-                        bcrypt.hash(newpassword,8)
-                        .then(hashedpassword=>{
-                            userModel.updateOne({email:userobject.email},{password:hashedpassword})
-                            .then(result=>{
-                                return res.json({message:'password updated successfully'})
-                            })
-                            .catch(err=>{
+                if(!tokenuserobject){
+                    return res.json({message:'something went wrong'})
+                }else{
+                    userModel.findOne({email:tokenuserobject.email})
+                    
+                    .then(userobject=>{
+                        console.log(userobject);
+                        if(!userobject){
+                            return res.json({message:'something wents wrong'})
+                        }else{
+                            bcrypt.hash(newpassword,8)
+                            .then(hashedpassword=>{
+                                userModel.updateOne({email:userobject.email},{password:hashedpassword})
+                                .then(result=>{
+                                    return res.json({message:'password updated successfully',User:userobject,Auth:true})
+                                })
+                                .catch(err=>{
+                                    return res.json({message:err})
+                                })
+                            }).catch(err=>{
                                 return res.json({message:err})
                             })
-                        }).catch(err=>{
-                            return res.json({message:err})
-                        })
-                    }
-                })
-                .catch(err=>{
-                    return res.json({message:err})
-                })
-            }
+                        }
+                    })
+                    .catch(err=>{
+                        return res.json({message:err})
+                    })
+                }
+            }).catch(err=>{
+                return res.json({message:err})
+            })
+
         }).catch(err=>{
             return res.json({message:err})
         })
+       
 
     }else{
         return res.json({message:'please check the inputs'})
